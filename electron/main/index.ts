@@ -1,14 +1,3 @@
-// The built directory structure
-//
-// ├─┬ dist
-// │ ├─┬ electron
-// │ │ ├─┬ main
-// │ │ │ └── index.js
-// │ │ └─┬ preload
-// │ │   └── index.js
-// │ ├── index.html
-// │ ├── ...other-static-files-from-public
-// │
 process.env.DIST = join(__dirname, '../..')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, '../public')
 
@@ -33,6 +22,7 @@ if (!app.requestSingleInstanceLock()) {
 // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 let win: BrowserWindow | null = null
+
 // Here, you can also use other preload
 const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL as string
@@ -57,7 +47,7 @@ async function createWindow() {
   } else {
     win.loadURL(url)
     // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   }
 
   // Test actively push message to the Electron-Renderer
