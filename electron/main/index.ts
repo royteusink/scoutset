@@ -4,6 +4,7 @@ process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, 
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
+import windowStateKeeper from 'electron-window-state';
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -29,9 +30,18 @@ const url = process.env.VITE_DEV_SERVER_URL as string
 const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
+  const windowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800
+  });
+
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
+    x: windowState.x,
+    y: windowState.y,
+    width: windowState.width,
+    height: windowState.height,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -40,7 +50,9 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
-  })
+  });
+
+  windowState.manage(win);
 
   if (app.isPackaged) {
     win.loadFile(indexHtml)
