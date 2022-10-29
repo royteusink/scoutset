@@ -1,11 +1,11 @@
 import { Project } from '@/types';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { v4 as uuid } from 'uuid';
 import useSettings from '@/compositions/useSettings';
 
-const activeProject = ref<Project>();
+const activeProject = ref<string>();
 const availableProjects = ref<Map<string, Project>>(new Map<string, Project>());
-const openProjects = ref<Map<string, Project>>(new Map<string, Project>());
+const openProjects = ref<Map<string, string>>(new Map<string, string>());
 
 export default function useProjects() {
   const { getSetting, setSetting } = useSettings();
@@ -16,21 +16,22 @@ export default function useProjects() {
   watch(availableProjects, value => setSetting('availableProjects', [...value.values()]), { deep: true });
 
   const loadProjects = async () => {
-    activeProject.value = await getSetting<Project>('activeProject');
+    activeProject.value = await getSetting<string>('activeProject');
 
     const aps = await getSetting<Project[]>('availableProjects');
     if (aps && aps.length) {
       aps.forEach(p => availableProjects.value.set(p.id, p));
     }
 
-    const opp = await getSetting<Project[]>('openProjects');
+    const opp = await getSetting<string[]>('openProjects');
     if (opp && opp.length) {
-      opp.forEach(p => openProjects.value.set(p.id, p));
+      opp.forEach(p => openProjects.value.set(p, p));
     }
   };
 
   const activateProject = (id: string) => {
-    activeProject.value = openProjects.value.get(id);
+    const project = availableProjects.value.get(id);
+    if (project) activeProject.value = project.id;
   };
 
   const closeProject = (id: string) => {
@@ -62,19 +63,25 @@ export default function useProjects() {
   const openProject = (id: string) => {
     const project = availableProjects.value.get(id);
     if (project) {
-      openProjects.value.set(id, project);
+      openProjects.value.set(id, project.id);
       setSetting('openProjects', [...openProjects.value.values()]);
     }
   };
 
   return {
-    loadProjects,
-    activeProject,
+    activeProject: computed(() => {
+      return activeProject.value ? availableProjects.value.get(activeProject.value) : undefined
+    }),
     availableProjects,
-    openProjects,
     activateProject,
-    closeProject,
     addProject,
+    closeProject,
+    loadProjects,
     openProject,
+    openProjects: computed(() => {
+      return [...openProjects.value.values()].map(p => {
+        return availableProjects.value.get(p);
+      }) as Project[];
+    }),
   };
 }

@@ -2,7 +2,7 @@
   <div class="flex-1 max-h-screen bg-green-400 flex flex-col">
     <Tabs @clickNewTab="createNewProject">
       <Tab
-        v-for="project in openProjects.values()"
+        v-for="project in openProjects"
         :key="project.id"
         :name="project.name"
         :active="project.id === activeProject?.id"
