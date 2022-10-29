@@ -15,9 +15,9 @@
     <span class="relative flex items-center justify-between gap-2 text-xs min-w-32 max-w-64 z-[1]">
       <img src="@/assets/vite.svg" class="flex-none h-4 w-4" />
       <span class="block w-full truncate text-left font-medium text-gray-700 group-focus:text-black">
-        {{ label }}
+        {{ name }}
       </span>
-      <span @click.stop="emit('close')" :aria-label="`Close tab ${label}`" tabindex="0" class="outline-none w-4 h-4 flex-none text-xs bg-transparent hover:bg-gray-200 focus:bg-gray-300 rounded-full flex justify-center items-center">
+      <span @click.stop="emit('close')" :title="`Close tab ${name}`" tabindex="0" class="outline-none w-4 h-4 flex-none text-xs bg-transparent hover:bg-gray-200 focus:bg-gray-300 rounded-full flex justify-center items-center">
         <svg viewBox="0 0 48 48" class="pointer-events-none w-3">
           <path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z" />
         </svg>
@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
   defineProps({
-    label: String,
+    name: String,
     active: Boolean,
   });
 

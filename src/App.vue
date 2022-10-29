@@ -1,11 +1,14 @@
 <template>
-  <div>
-    <RouterView />
-    <RouterLink to="/">Go to Home</RouterLink>
-    <RouterLink to="/settings">Go to Settings</RouterLink>
-  </div>
+  <RouterView />
 </template>
 
 <script setup lang="ts">
+  import { onMounted } from 'vue';
+  import useProjects from '@/compositions/useProjects';
 
+  const { loadProjects } = useProjects();
+
+  onMounted(async () => {
+    await loadProjects();
+  });
 </script>

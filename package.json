@@ -1,7 +1,7 @@
 {
   "name": "scoutset",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scoutset is search engine data explorer",
   "main": "dist/electron/main/index.js",
   "private": true,
   "scripts": {
@@ -12,18 +12,20 @@
     "type": "git",
     "url": "git+https://github.com/royteusink/scoutset.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["elasticsearch", "searchengine", "explorer", "viewer", "scoutset"],
+  "author": "Roy Teusink",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/royteusink/scoutset/issues"
   },
   "homepage": "https://github.com/royteusink/scoutset#readme",
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "@vitejs/plugin-vue": "^3.0.1",
     "electron": "^21.0.1",
     "electron-builder": "^23.3.3",
     "electron-window-state": "^5.0.3",
+    "node-fetch": "^3.2.10",
     "postcss": "^8.4.17",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.7.4",
@@ -39,5 +41,11 @@
       "VITE_DEV_SERVER_PORT": 3344,
       "VITE_DEV_SERVER_URL": "http://127.0.0.1:3344"
     }
+  },
+  "dependencies": {
+    "@vueuse/core": "^9.3.0",
+    "electron-store": "^8.1.0",
+    "uuid": "^9.0.0",
+    "vue-multipane": "^0.9.5"
   }
 }

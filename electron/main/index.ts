@@ -5,6 +5,8 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 import windowStateKeeper from 'electron-window-state';
+import fetch from 'node-fetch';
+import Store from 'electron-store';
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -16,6 +18,11 @@ if (!app.requestSingleInstanceLock()) {
   app.quit()
   process.exit(0)
 }
+
+const storage = new Store();
+
+console.log(app.getPath('userData'));
+
 
 // Remove electron security warnings
 // This warning only shows in development mode
@@ -113,3 +120,21 @@ ipcMain.handle('open-win', (event, arg) => {
     // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
   }
 })
+
+ipcMain.handle('request', async (event, url: string, headers = {}) => {
+  try {
+    const response = await fetch(url);
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+})
+
+ipcMain.handle('getSettings', async (event, key: string) => {
+  return storage.get('settings');
+});
+
+ipcMain.handle('setSettings', async (event, key: string, data) => {
+  return storage.set(`settings.${key}`, data);
+});
