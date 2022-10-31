@@ -1,11 +1,13 @@
 <template>
   <div class="flex-1 max-h-screen bg-green-400 flex flex-col">
-    <Tabs @clickNewTab="createNewProject">
+    <Tabs :allowNewTab="true" @clickNewTab="createNewProject">
       <Tab
         v-for="project in openProjects"
         :key="project.id"
         :name="project.name"
         :active="project.id === activeProject?.id"
+        :isClosable="true"
+        :icon="true"
         @click="activateProject(project.id)"
         @close="closeProject(project.id)"
       />
@@ -14,15 +16,15 @@
     <div class="bg-white flex flex-1 h-full overflow-clip">
       <aside class="flex-none w-72 border-r border-gray-200">
         <div>
-          <button v-for="record in indices" :key="record.uuid" type="button" @click="loadIndex(record.index)" :class="{
+          <button v-for="record in indices" :key="record.id" type="button" @click="loadIndex(record.name)" :class="{
             'text-xs flex justify-between text-left py-1 px-2 w-full': true,
-            'bg-blue-500 text-white': record.index === activeIndex,
-            'odd:bg-gray-50 hover:bg-blue-500 hover:text-white': record.index !== activeIndex,
+            'bg-blue-500 text-white': record.name === activeIndex,
+            'odd:bg-gray-50 hover:bg-blue-500 hover:text-white': record.name !== activeIndex,
           }">
             <span class="block truncate flex-1">
-            {{ record.index }}
+            {{ record.name }}
             </span>
-            <span class="flex-none block pl-2 text-gray-400">{{ record['docs.count'] }}</span>
+            <span class="flex-none block pl-2 text-gray-400">{{ record.total }}</span>
           </button>
         </div>
       </aside>
@@ -31,8 +33,14 @@
         <Table :columns="columns" :rows="rows" class="min-w-full" @clickRow="handleClickRow" />
       </section>
 
-      <JsonInspector v-if="mapping" :jsonValue="mapping" class="w-96 border-l border-gray-200" />
-      <JsonInspector v-if="source" :jsonValue="source" class="w-96 border-l border-gray-200" />
+      <section v-if="source" class="w-full flex flex-col max-w-[30vw] border-l border-gray-200">
+        <Tabs>
+          <Tab name="Record" :wrap="true" :active="inspectionTab === 'source'" @click="inspectionTab = 'source'" />
+          <Tab name="Mapping" :wrap="true" :active="inspectionTab === 'mapping'" @click="inspectionTab = 'mapping'" />
+        </Tabs>
+        <JsonInspector v-if="source && inspectionTab === 'source'" :jsonValue="source" />
+        <JsonInspector v-if="mapping && inspectionTab === 'mapping'" :jsonValue="mapping" />
+      </section>
     </div>
   </div>
 </template>
@@ -47,16 +55,18 @@
   import Table from '@/components/Table.vue';
   import Client from '@/models/Client';
   import JsonInspector from '@/components/JsonInspector.vue';
+  import type { IndicesData, DocumentsData } from '@/models/Client';
 
   const { openProjects, activeProject, activateProject, closeProject } = useProjects();
   const { getClient } = useClient();
   const { replace } = useRouter();
 
   const client = ref<Client>();
-  const indices = ref<Record<string, string>[] | undefined>([]);
+  const indices = ref<IndicesData>([]);
   const columns = ref<string[]>([]);
-  const rows = ref<{ id: string, data: Record<string, string> }[]>([]);
+  const rows = ref<DocumentsData>([]);
 
+  const inspectionTab = ref('source');
   const activeIndex = ref();
   const source = ref();
   const mapping = ref();
@@ -66,7 +76,7 @@
   }, { immediate: true });
 
   watch(client, async () => {
-    indices.value = client.value ? await client.value.indices() : undefined;
+    indices.value = client.value ? await client.value.indices() : [];
   }, { immediate: true });
 
   const loadIndex = async (index: string) => {
@@ -76,13 +86,12 @@
 
     const records = await client.value.documents(index, 0);
 
-    columns.value = Object.keys(records.hits.hits[0]._source);
+    if (records.length > 0) {
+      columns.value = Object.keys(records[0].data);
+      rows.value = records;
+    }
 
-    rows.value = records.hits.hits.map(hit => ({
-      id: hit._id,
-      data: hit._source,
-    }));
-
+    source.value = null;
     mapping.value = await client.value.mappings(index);
   };
 
@@ -90,7 +99,8 @@
     replace({ path: '/settings' });
   };
 
-  const handleClickRow = (data: unknown) => {
-    source.value = data;
+  const handleClickRow = (row: { id: string, data: Record<string, string> }) => {
+    source.value = row.data;
+    inspectionTab.value = 'source';
   };
 </script>

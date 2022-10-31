@@ -46,7 +46,7 @@ export default function useProjects() {
     }
   };
 
-  const addProject = (host: string, port: number, name: string) => {
+  const createProject = (host: string, port: number, name: string) => {
     const id = uuid();
 
     availableProjects.value.set(id, {
@@ -60,12 +60,29 @@ export default function useProjects() {
     return id;
   };
 
-  const openProject = (id: string) => {
-    const project = availableProjects.value.get(id);
-    if (project) {
-      openProjects.value.set(id, project.id);
-      setSetting('openProjects', [...openProjects.value.values()]);
+  const deleteProject = (id: string) => {
+    const availableProject = availableProjects.value.get(id);
+    if (availableProject) availableProjects.value.delete(id);
+
+    closeProject(id);
+  };
+
+  const updateProject = (id: string, host: string, port: number, name: string) => {
+    const availableProject = availableProjects.value.get(id);
+    if (availableProject) {
+      availableProjects.value.set(id, {
+        id,
+        name,
+        type: 'elasticsearch',
+        host,
+        port,
+      });
     }
+  };
+
+  const openProject = (id: string) => {
+    const availableProject = availableProjects.value.get(id);
+    if (availableProject) openProjects.value.set(id, availableProject.id);
   };
 
   return {
@@ -74,7 +91,7 @@ export default function useProjects() {
     }),
     availableProjects,
     activateProject,
-    addProject,
+    createProject,
     closeProject,
     loadProjects,
     openProject,
@@ -83,5 +100,7 @@ export default function useProjects() {
         return availableProjects.value.get(p);
       }) as Project[];
     }),
+    deleteProject,
+    updateProject,
   };
 }
