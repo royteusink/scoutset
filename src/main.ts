@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import '@/style.css';
 // import './samples/node-api'
 
@@ -8,7 +8,7 @@ import Explorer from '@/screens/Explorer.vue';
 import Settings from '@/screens/Settings.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     { path: '/', component: Explorer },
     { path: '/settings', component: Settings },
