@@ -1,11 +1,11 @@
-process.env.DIST = join(__dirname, '../..')
-process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, '../public')
+process.env.DIST = join(__dirname, '../..');
+process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, '../public');
 
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
-import { release } from 'os'
-import { join } from 'path'
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { release } from 'os';
+import { join } from 'path';
+import https from 'https';
 import windowStateKeeper from 'electron-window-state';
-import fetch from 'node-fetch';
 import Store from 'electron-store';
 
 // Disable GPU Acceleration for Windows 7
@@ -121,10 +121,47 @@ ipcMain.handle('open-win', (event, arg) => {
   }
 })
 
-ipcMain.handle('request', async (event, url: string, headers = {}) => {
+const requestWithBody = (body: string, url: string) => {
+  return new Promise((resolve, reject) => {
+    const callback = function (response) {
+      let str = '';
+
+      response.on('data', function (chunk) {
+        str += chunk;
+      });
+
+      response.on('end', function () {
+        resolve(JSON.parse(str));
+      });
+    };
+
+    const options = {
+      headers: {
+        'content-type': 'application/json',
+      },
+    };
+
+    if (body) {
+      options.headers['content-length'] = body.length;
+    }
+
+    const req = https.request(url, options, callback);
+
+    req.on('error', (e) => {
+      reject(e);
+    });
+
+    if (body) req.write(body);
+    req.end();
+  });
+};
+
+ipcMain.handle('request', async (event, url: string, body = null, headers = {}) => {
   try {
-    const response = await fetch(url);
-    return await response.json();
+    const bodyData = body ? JSON.stringify(body) : null;
+    const response = await requestWithBody(bodyData, url);
+    // console.log(response);
+    return response;
   } catch (err) {
     console.log(err);
     return null;

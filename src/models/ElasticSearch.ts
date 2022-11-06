@@ -26,7 +26,7 @@ export default class ElasticSearch extends Client {
 
     records.sort((a: { index: string }, b: { index: string }) => a.index.localeCompare(b.index));
 
-    return records.filter((record) => record.index !== '.geoip_databases').map(
+    return records.filter((record) => !record.index.startsWith('.')).map(
         record => ({
         id: record.uuid,
         name: record.index,
@@ -35,21 +35,29 @@ export default class ElasticSearch extends Client {
     );
   }
 
-  async documents(index: string, page: number): Promise<DocumentsData> {
-    const pageSize = 100;
+  async documents(index: string, page: number, search?: string): Promise<DocumentsData> {
+    const pageSize = 30;
     const pageOffset = page * pageSize;
 
-    const records = await this.request<ElasticSearchSearchResponse>(`https://${this.project.host}:${this.project.port}/${index}/_search?format=json&size=${pageSize}&from=${pageOffset}`);
+    let body = null;
+    if (search) {
+      body = {
+        query: {
+          simple_query_string : {
+            query: search,
+            default_operator: 'and',
+          },
+        },
+      };
+    }
+
+    const records = await this.request<ElasticSearchSearchResponse>(`https://${this.project.host}:${this.project.port}/${index}/_search?format=json&size=${pageSize}&from=${pageOffset}`, body);
     if (!records) return [];
 
     return records.hits.hits.map((hit) => ({
       id: hit._id,
       data: hit._source,
     }));
-  }
-
-  async show(): Promise<any> {
-
   }
 
   async mappings(index: string): Promise<any> {

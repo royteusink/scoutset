@@ -7,22 +7,23 @@ export type IndicesData = Array<{
   total: number
 }>
 
-export type DocumentsData = Array<{
+export type DocumentInfo = {
   id: string
   data: Record<string, string>
-}>
+};
+
+export type DocumentsData = DocumentInfo[];
 
 export default abstract class Client {
 
   constructor(protected project: Project) {
   }
 
-  async request<T>(url: string): Promise<T | undefined> {
-    return await ipcRenderer.invoke('request', url);
+  async request<T>(url: string, body?: any): Promise<T | undefined> {
+    return await ipcRenderer.invoke('request', url, body);
   };
 
   abstract indices(): Promise<IndicesData>;
-  abstract documents(index: string, page: number): Promise<DocumentsData>;
-  abstract show(): Promise<any>;
+  abstract documents(index: string, page: number, search?: string): Promise<DocumentsData>;
   abstract mappings(index: string): Promise<any>;
 }
