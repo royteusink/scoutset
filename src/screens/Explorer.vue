@@ -42,6 +42,11 @@
                 <path d="m18.75 36-2.15-2.15 9.9-9.9-9.9-9.9 2.15-2.15L30.8 23.95Z" />
               </svg>
             </button>
+            <button @click="refreshPage" type="button" title="Refresh page" class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="fill-current w-5 h-5">
+                <path d="M24 40q-6.65 0-11.32-4.67Q8 30.65 8 24t4.67-11.32Q17.36 8 24 8q4.25 0 7.45 1.73T37 14.45V8h3v12.7H27.3v-3h8.4q-1.9-3-4.85-4.85Q27.9 11 24 11q-5.45 0-9.22 3.77Q11 18.55 11 24q0 5.45 3.77 9.22Q18.55 37 24 37q4.15 0 7.6-2.38 3.45-2.37 4.8-6.27h3.1q-1.45 5.25-5.75 8.45Q29.45 40 24 40Z" />
+              </svg>
+            </button>
           </nav>
           <input type="text" v-model="query" @input="updateRecords" placeholder="Search documents" title="Enter keywords to search within documents" class="p-2 outline-none w-full" />
         </div>
@@ -114,6 +119,10 @@
     inspectionPanelOpen.value = false;
   }, { immediate: true });
 
+  const loadIndices = async () => {
+    indices.value = client.value ? await client.value.indices() : [];
+  };
+
   /**
    * Get index info of the active index.
    */
@@ -150,6 +159,11 @@
    */
   const gotoNextPage = () => {
     page.value += 1;
+    updateRecords();
+  };
+
+  const refreshPage = () => {
+    loadIndices();
     updateRecords();
   };
 
