@@ -4,3 +4,4 @@ dist
 vite-plugin-electron.log
 yarn-error.log
 NOTES.md
+/.idea
