@@ -26,4 +26,5 @@ export default abstract class Client {
   abstract indices(): Promise<IndicesData>;
   abstract documents(index: string, page: number, search?: string): Promise<DocumentsData>;
   abstract mappings(index: string): Promise<any>;
+  abstract settings(index: string): Promise<any>;
 }

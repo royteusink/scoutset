@@ -63,4 +63,8 @@ export default class ElasticSearch extends Client {
   async mappings(index: string): Promise<any> {
     return await this.request(`https://${this.project.host}:${this.project.port}/${index}/_mapping?format=json`);
   }
+
+  async settings(index: string): Promise<any> {
+    return await this.request(`https://${this.project.host}:${this.project.port}/${index}/_settings?format=json`);
+  }
 }

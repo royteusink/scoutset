@@ -69,10 +69,12 @@
         <div class="flex flex-col h-full">
           <Tabs>
             <Tab v-if="mapping" name="Mapping" :wrap="true" :active="inspectionTab === 'mapping'" @click="inspectionTab = 'mapping'" />
+            <Tab v-if="settings" name="Settings" :wrap="true" :active="inspectionTab === 'settings'" @click="inspectionTab = 'settings'" />
             <Tab v-if="source" name="Record" :wrap="true" :active="inspectionTab === 'source'" @click="inspectionTab = 'source'" />
           </Tabs>
           <JsonInspector v-if="source && inspectionTab === 'source'" :jsonValue="source" />
           <JsonInspector v-if="mapping && inspectionTab === 'mapping'" :jsonValue="mapping" />
+          <JsonInspector v-if="settings && inspectionTab === 'settings'" :jsonValue="settings" />
         </div>
       </aside>
     </div>
@@ -104,6 +106,7 @@
   const activeIndex = ref();
   const source = ref();
   const mapping = ref();
+  const settings = ref();
   const query = ref();
   const page = ref(0);
   const inspectionPanelOpen = ref(false);
@@ -116,6 +119,7 @@
     columns.value = [];
     source.value = null;
     mapping.value = null;
+    settings.value = null;
     inspectionPanelOpen.value = false;
   }, { immediate: true });
 
@@ -180,12 +184,14 @@
     query.value = null;
     source.value = null;
     mapping.value = null;
+    settings.value = null;
     inspectionTab.value = 'mapping';
     inspectionPanelOpen.value = false;
 
     updateRecords();
 
     mapping.value = await client.value.mappings(index);
+    settings.value = await client.value.settings(index);
   };
 
   /**
