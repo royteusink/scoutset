@@ -49,9 +49,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { isNumber, isObject, isString, isBoolean } from '@vueuse/core';
   import { ref } from 'vue';
   import JsonValue from '@/components/JsonValue.vue';
+
+  const isString = (x: unknown): x is string => typeof x === 'string';
+  const isNumber = (x: unknown): x is number => typeof x === 'number';
+  const isBoolean = (x: unknown): x is boolean => typeof x === 'boolean';
+  const isObject = (x: unknown): x is Record<string, unknown> =>
+    typeof x === 'object' && x !== null && !Array.isArray(x);
 
   const props = withDefaults(defineProps<{
     jsonValue: any;
@@ -70,7 +75,7 @@
     numberValueClass: 'text-red-500',
     booleanValueClass: 'text-pink-500',
     nullValueClass: 'text-gray-500',
-    propertySeparatorClass: 'text-black-500',
+    propertySeparatorClass: 'text-black',
     indentationSpaces: 2,
   };
 

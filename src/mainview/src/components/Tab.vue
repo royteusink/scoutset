@@ -1,6 +1,6 @@
 <template>
   <button type="button" @click="emit('click')" :class="{
-    'relative select-none focus:outline-none h-8 transition-colors group': true,
+    'relative select-none focus:outline-hidden h-8 transition-colors group': true,
     'bg-gray-200 hover:bg-gray-50 hover:z-10 focus:bg-gray-50 focus:z-10': !active,
     'bg-white z-20': active,
   }">
@@ -20,7 +20,7 @@
       <span class="block w-full truncate text-left font-medium text-gray-700 group-focus:text-black">
         {{ name }}
       </span>
-      <span v-if="isClosable" @click.stop="emit('close')" :title="`Close tab ${name}`" tabindex="0" class="outline-none w-4 h-4 flex-none text-xs bg-transparent hover:bg-gray-200 focus:bg-gray-300 rounded-full flex justify-center items-center">
+      <span v-if="isClosable" @click.stop="emit('close')" :title="`Close tab ${name}`" tabindex="0" class="outline-hidden w-4 h-4 flex-none text-xs bg-transparent hover:bg-gray-200 focus:bg-gray-300 rounded-full flex justify-center items-center">
         <svg viewBox="0 0 48 48" class="pointer-events-none w-3">
           <path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z" />
         </svg>
