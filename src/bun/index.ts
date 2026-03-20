@@ -33,6 +33,32 @@ async function writeSettings(settings: Record<string, any>): Promise<void> {
   await Bun.write(settingsPath, JSON.stringify(settings, null, 2));
 }
 
+// Migrate settings from old config.json if settings.json is empty
+async function migrateOldConfig(): Promise<void> {
+  const currentSettings = await readSettings();
+  if (Object.keys(currentSettings).length > 0) {
+    return; // settings.json already has data, skip migration
+  }
+
+  try {
+    const oldConfigPath = `${Utils.paths.home}/Library/Application Support/scoutset/config.json`;
+    const oldFile = Bun.file(oldConfigPath);
+    if (await oldFile.exists()) {
+      const oldConfig = await oldFile.json();
+      if (oldConfig?.settings && Object.keys(oldConfig.settings).length > 0) {
+        // Old format wraps everything under "settings" key — unwrap it
+        await writeSettings(oldConfig.settings);
+        console.log("Migrated settings from old config.json");
+      }
+    }
+  } catch (err) {
+    console.error("Failed to migrate old config:", err);
+  }
+}
+
+// Run migration before creating the window
+await migrateOldConfig();
+
 // Define RPC handlers (must be done before creating BrowserWindow)
 const rpc = BrowserView.defineRPC<ScoutsetRPC>({
   maxRequestTime: 30000,
