@@ -1,5 +1,7 @@
 import type { ElectrobunConfig } from "electrobun";
 
+const bundleCEF = false; // Bundle Chromium Embedded Framework instead of using system WebView
+
 export default {
   app: {
     name: "scoutset",
@@ -20,7 +22,8 @@ export default {
       "src/mainview/dist/assets/": "views/mainview/assets/",
     },
     mac: {
-      bundleCEF: false,
+      bundleCEF, // Bundle CEF (Chromium Embedded Framework) instead of using system WebView
+      defaultRenderer: bundleCEF ? "cef" : "native", // Default renderer for webviews when not explicitly specified
     },
   },
 } satisfies ElectrobunConfig;
