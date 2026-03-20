@@ -1,5 +1,5 @@
 import { Project } from '@/types';
-import { ipcRenderer } from 'electron';
+import { rpc } from '@/rpc';
 
 export type IndicesData = Array<{
   id: string
@@ -20,7 +20,7 @@ export default abstract class Client {
   }
 
   async request<T>(url: string, body?: any): Promise<T | undefined> {
-    return await ipcRenderer.invoke('request', url, body);
+    return await rpc.request.request({ url, body }) as T | undefined;
   };
 
   abstract indices(): Promise<IndicesData>;

@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import '@/style.css';
-// import './samples/node-api'
 
 import App from '@/App.vue';
 import Explorer from '@/screens/Explorer.vue';
@@ -17,7 +16,4 @@ const router = createRouter({
 
 createApp(App)
   .use(router)
-  .mount('#app')
-  .$nextTick(() => {
-    postMessage({ payload: 'removeLoading' }, '*')
-  });
+  .mount('#app');
