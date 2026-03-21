@@ -24,7 +24,7 @@
     "dev:view": "cd src/mainview && bunx vite --host",
     "build:view": "cd src/mainview && bunx vue-tsc --noEmit && bunx vite build",
     "dev": "bun run build:view && electrobun dev",
-    "dev:hmr": "SCOUTSET_DEV=1 bun run dev:view -- --port 5188 & sleep 2 && SCOUTSET_DEV=1 electrobun dev",
+    "dev:hmr": "concurrently -k -n vite,electrobun -c blue,green \"SCOUTSET_DEV=1 bun run dev:view -- --port 5188\" \"SCOUTSET_DEV=1 electrobun dev\"",
     "build": "bun run build:view && electrobun build",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
@@ -39,6 +39,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.2",
     "@vitejs/plugin-vue": "^6.0.5",
+    "concurrently": "^9.2.1",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
     "oxlint-tsgolint": "^0.17.1",
