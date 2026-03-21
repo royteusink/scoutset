@@ -11,9 +11,11 @@ export default function useProjects() {
   const { getSetting, setSetting } = useSettings();
 
   // Watch for changes and store them in the settings.
-  watch(activeProject,     value => setSetting('activeProject', value));
-  watch(openProjects,      value => setSetting('openProjects', [...value.values()]), { deep: true });
-  watch(availableProjects, value => setSetting('availableProjects', [...value.values()]), { deep: true });
+  watch(activeProject, value => setSetting('activeProject', value));
+  watch(openProjects, value => setSetting('openProjects', [...value.values()]), { deep: true });
+  watch(availableProjects, value => setSetting('availableProjects', [...value.values()]), {
+    deep: true,
+  });
 
   const loadProjects = async () => {
     activeProject.value = await getSetting<string>('activeProject');
@@ -87,7 +89,7 @@ export default function useProjects() {
 
   return {
     activeProject: computed(() => {
-      return activeProject.value ? availableProjects.value.get(activeProject.value) : undefined
+      return activeProject.value ? availableProjects.value.get(activeProject.value) : undefined;
     }),
     availableProjects,
     activateProject,

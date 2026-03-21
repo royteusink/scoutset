@@ -16,13 +16,19 @@
     <div class="bg-white flex flex-1 h-full overflow-clip">
       <aside class="flex-none w-72 border-r border-gray-200 overflow-auto">
         <div>
-          <button v-for="record in indices" :key="record.id" type="button" @click="loadIndex(record.name)" :class="{
-            'text-xs flex justify-between text-left py-1 px-2 w-full': true,
-            'bg-blue-500 text-white': record.name === activeIndex,
-            'odd:bg-gray-50 hover:bg-blue-500 hover:text-white': record.name !== activeIndex,
-          }">
+          <button
+            v-for="record in indices"
+            :key="record.id"
+            type="button"
+            @click="loadIndex(record.name)"
+            :class="{
+              'text-xs flex justify-between text-left py-1 px-2 w-full': true,
+              'bg-blue-500 text-white': record.name === activeIndex,
+              'odd:bg-gray-50 hover:bg-blue-500 hover:text-white': record.name !== activeIndex,
+            }"
+          >
             <span class="block truncate flex-1">
-            {{ record.name }}
+              {{ record.name }}
             </span>
             <span class="flex-none block pl-2 text-gray-400">{{ record.total }}</span>
           </button>
@@ -32,45 +38,117 @@
       <section class="flex-1 relative flex flex-col min-w-0">
         <div v-if="activeIndex" class="flex justify-between border-b border-gray-200">
           <nav class="flex divide-x divide-gray-100 border-r border-gray-100">
-            <button :disabled="!canNavigateBack" @click="gotoPreviousPage" type="button" title="Previous page" class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="fill-current w-5 h-5">
+            <button
+              :disabled="!canNavigateBack"
+              @click="gotoPreviousPage"
+              type="button"
+              title="Previous page"
+              class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-hidden"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                class="fill-current w-5 h-5"
+              >
                 <path d="M28.05 36 16 23.95 28.05 11.9l2.15 2.15-9.9 9.9 9.9 9.9Z" />
               </svg>
             </button>
-            <button :disabled="!canNavigateForward" @click="gotoNextPage" type="button" title="Next page" class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="fill-current w-5 h-5">
+            <button
+              :disabled="!canNavigateForward"
+              @click="gotoNextPage"
+              type="button"
+              title="Next page"
+              class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-hidden"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                class="fill-current w-5 h-5"
+              >
                 <path d="m18.75 36-2.15-2.15 9.9-9.9-9.9-9.9 2.15-2.15L30.8 23.95Z" />
               </svg>
             </button>
-            <button @click="refreshPage" type="button" title="Refresh page" class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="fill-current w-5 h-5">
-                <path d="M24 40q-6.65 0-11.32-4.67Q8 30.65 8 24t4.67-11.32Q17.36 8 24 8q4.25 0 7.45 1.73T37 14.45V8h3v12.7H27.3v-3h8.4q-1.9-3-4.85-4.85Q27.9 11 24 11q-5.45 0-9.22 3.77Q11 18.55 11 24q0 5.45 3.77 9.22Q18.55 37 24 37q4.15 0 7.6-2.38 3.45-2.37 4.8-6.27h3.1q-1.45 5.25-5.75 8.45Q29.45 40 24 40Z" />
+            <button
+              @click="refreshPage"
+              type="button"
+              title="Refresh page"
+              class="w-10 h-10 flex justify-center items-center bg-white focus:bg-gray-50 hover:bg-gray-100 active:bg-gray-300 outline-hidden"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                class="fill-current w-5 h-5"
+              >
+                <path
+                  d="M24 40q-6.65 0-11.32-4.67Q8 30.65 8 24t4.67-11.32Q17.36 8 24 8q4.25 0 7.45 1.73T37 14.45V8h3v12.7H27.3v-3h8.4q-1.9-3-4.85-4.85Q27.9 11 24 11q-5.45 0-9.22 3.77Q11 18.55 11 24q0 5.45 3.77 9.22Q18.55 37 24 37q4.15 0 7.6-2.38 3.45-2.37 4.8-6.27h3.1q-1.45 5.25-5.75 8.45Q29.45 40 24 40Z"
+                />
               </svg>
             </button>
           </nav>
-          <input type="text" v-model="query" @input="updateRecords" placeholder="Search documents" title="Enter keywords to search within documents" class="p-2 outline-hidden w-full" />
+          <input
+            type="text"
+            v-model="query"
+            @input="updateRecords"
+            placeholder="Search documents"
+            title="Enter keywords to search within documents"
+            class="p-2 outline-hidden w-full"
+          />
         </div>
         <div v-if="activeIndex" class="p-2 text-xs bg-white">
-          <span class="text-gray-500">{{ activeProject?.name}}</span> / {{ activeIndexInfo?.name }}
+          <span class="text-gray-500">{{ activeProject?.name }}</span> / {{ activeIndexInfo?.name }}
         </div>
-        <Table v-if="activeIndex" :columns="columns" :rows="rows" class="min-w-full flex-1" @clickRow="handleClickRow" />
+        <Table
+          v-if="activeIndex"
+          :columns="columns"
+          :rows="rows"
+          class="min-w-full flex-1"
+          @clickRow="handleClickRow"
+        />
       </section>
 
-      <aside v-if="activeIndex" :class="{
-        'relative flex flex-col max-w-[30vw] border-l border-gray-200': true,
-        'w-full': inspectionPanelOpen,
-        'w-0': !inspectionPanelOpen
-      }">
-        <button type="button" title="Toggle inspection panel" @click="inspectionPanelOpen = !inspectionPanelOpen" class="absolute right-full top-1/2 -translate-y-1/2 rounded-l-md w-5 h-24 text-gray-500 bg-gray-50 border border-gray-200 hover:bg-gray-100 focus:bg-gray-100">
+      <aside
+        v-if="activeIndex"
+        :class="{
+          'relative flex flex-col max-w-[30vw] border-l border-gray-200': true,
+          'w-full': inspectionPanelOpen,
+          'w-0': !inspectionPanelOpen,
+        }"
+      >
+        <button
+          type="button"
+          title="Toggle inspection panel"
+          @click="inspectionPanelOpen = !inspectionPanelOpen"
+          class="absolute right-full top-1/2 -translate-y-1/2 rounded-l-md w-5 h-24 text-gray-500 bg-gray-50 border border-gray-200 hover:bg-gray-100 focus:bg-gray-100"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="fill-current">
-            <path d="M17.5 40q-1.45 0-2.475-1.025Q14 37.95 14 36.5q0-1.45 1.025-2.475Q16.05 33 17.5 33q1.45 0 2.475 1.025Q21 35.05 21 36.5q0 1.45-1.025 2.475Q18.95 40 17.5 40Zm13 0q-1.45 0-2.475-1.025Q27 37.95 27 36.5q0-1.45 1.025-2.475Q29.05 33 30.5 33q1.45 0 2.475 1.025Q34 35.05 34 36.5q0 1.45-1.025 2.475Q31.95 40 30.5 40Zm-13-12.5q-1.45 0-2.475-1.025Q14 25.45 14 24q0-1.45 1.025-2.475Q16.05 20.5 17.5 20.5q1.45 0 2.475 1.025Q21 22.55 21 24q0 1.45-1.025 2.475Q18.95 27.5 17.5 27.5Zm13 0q-1.45 0-2.475-1.025Q27 25.45 27 24q0-1.45 1.025-2.475Q29.05 20.5 30.5 20.5q1.45 0 2.475 1.025Q34 22.55 34 24q0 1.45-1.025 2.475Q31.95 27.5 30.5 27.5ZM17.5 15q-1.45 0-2.475-1.025Q14 12.95 14 11.5q0-1.45 1.025-2.475Q16.05 8 17.5 8q1.45 0 2.475 1.025Q21 10.05 21 11.5q0 1.45-1.025 2.475Q18.95 15 17.5 15Zm13 0q-1.45 0-2.475-1.025Q27 12.95 27 11.5q0-1.45 1.025-2.475Q29.05 8 30.5 8q1.45 0 2.475 1.025Q34 10.05 34 11.5q0 1.45-1.025 2.475Q31.95 15 30.5 15Z"/>
+            <path
+              d="M17.5 40q-1.45 0-2.475-1.025Q14 37.95 14 36.5q0-1.45 1.025-2.475Q16.05 33 17.5 33q1.45 0 2.475 1.025Q21 35.05 21 36.5q0 1.45-1.025 2.475Q18.95 40 17.5 40Zm13 0q-1.45 0-2.475-1.025Q27 37.95 27 36.5q0-1.45 1.025-2.475Q29.05 33 30.5 33q1.45 0 2.475 1.025Q34 35.05 34 36.5q0 1.45-1.025 2.475Q31.95 40 30.5 40Zm-13-12.5q-1.45 0-2.475-1.025Q14 25.45 14 24q0-1.45 1.025-2.475Q16.05 20.5 17.5 20.5q1.45 0 2.475 1.025Q21 22.55 21 24q0 1.45-1.025 2.475Q18.95 27.5 17.5 27.5Zm13 0q-1.45 0-2.475-1.025Q27 25.45 27 24q0-1.45 1.025-2.475Q29.05 20.5 30.5 20.5q1.45 0 2.475 1.025Q34 22.55 34 24q0 1.45-1.025 2.475Q31.95 27.5 30.5 27.5ZM17.5 15q-1.45 0-2.475-1.025Q14 12.95 14 11.5q0-1.45 1.025-2.475Q16.05 8 17.5 8q1.45 0 2.475 1.025Q21 10.05 21 11.5q0 1.45-1.025 2.475Q18.95 15 17.5 15Zm13 0q-1.45 0-2.475-1.025Q27 12.95 27 11.5q0-1.45 1.025-2.475Q29.05 8 30.5 8q1.45 0 2.475 1.025Q34 10.05 34 11.5q0 1.45-1.025 2.475Q31.95 15 30.5 15Z"
+            />
           </svg>
         </button>
         <div class="flex flex-col h-full">
           <Tabs>
-            <Tab v-if="mapping" name="Mapping" :wrap="true" :active="inspectionTab === 'mapping'" @click="inspectionTab = 'mapping'" />
-            <Tab v-if="settings" name="Settings" :wrap="true" :active="inspectionTab === 'settings'" @click="inspectionTab = 'settings'" />
-            <Tab v-if="source" name="Record" :wrap="true" :active="inspectionTab === 'source'" @click="inspectionTab = 'source'" />
+            <Tab
+              v-if="mapping"
+              name="Mapping"
+              :wrap="true"
+              :active="inspectionTab === 'mapping'"
+              @click="inspectionTab = 'mapping'"
+            />
+            <Tab
+              v-if="settings"
+              name="Settings"
+              :wrap="true"
+              :active="inspectionTab === 'settings'"
+              @click="inspectionTab = 'settings'"
+            />
+            <Tab
+              v-if="source"
+              name="Record"
+              :wrap="true"
+              :active="inspectionTab === 'source'"
+              @click="inspectionTab = 'source'"
+            />
           </Tabs>
           <JsonInspector v-if="source && inspectionTab === 'source'" :jsonValue="source" />
           <JsonInspector v-if="mapping && inspectionTab === 'mapping'" :jsonValue="mapping" />
@@ -82,36 +160,38 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue';
-  import { useRouter } from 'vue-router';
-  import useProjects from '@/compositions/useProjects';
-  import useClient from '@/compositions/useClient';
-  import Tabs from '@/components/Tabs.vue';
-  import Tab from '@/components/Tab.vue';
-  import Table from '@/components/Table.vue';
-  import Client from '@/models/Client';
-  import JsonInspector from '@/components/JsonInspector.vue';
-  import type { IndicesData, DocumentsData, DocumentInfo } from '@/models/Client';
+import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import useProjects from '@/compositions/useProjects';
+import useClient from '@/compositions/useClient';
+import Tabs from '@/components/Tabs.vue';
+import Tab from '@/components/Tab.vue';
+import Table from '@/components/Table.vue';
+import Client from '@/models/Client';
+import JsonInspector from '@/components/JsonInspector.vue';
+import type { IndicesData, DocumentsData, DocumentInfo } from '@/models/Client';
 
-  const { openProjects, activeProject, activateProject, closeProject } = useProjects();
-  const { getClient } = useClient();
-  const { replace } = useRouter();
+const { openProjects, activeProject, activateProject, closeProject } = useProjects();
+const { getClient } = useClient();
+const { replace } = useRouter();
 
-  const client = ref<Client>();
-  const indices = ref<IndicesData>([]);
-  const columns = ref<string[]>([]);
-  const rows = ref<DocumentsData>([]);
+const client = ref<Client>();
+const indices = ref<IndicesData>([]);
+const columns = ref<string[]>([]);
+const rows = ref<DocumentsData>([]);
 
-  const inspectionTab = ref('mapping');
-  const activeIndex = ref();
-  const source = ref();
-  const mapping = ref();
-  const settings = ref();
-  const query = ref();
-  const page = ref(0);
-  const inspectionPanelOpen = ref(false);
+const inspectionTab = ref('mapping');
+const activeIndex = ref();
+const source = ref();
+const mapping = ref();
+const settings = ref();
+const query = ref();
+const page = ref(0);
+const inspectionPanelOpen = ref(false);
 
-  watch(activeProject, async () => {
+watch(
+  activeProject,
+  async () => {
     client.value = activeProject.value ? await getClient(activeProject.value) : undefined;
     indices.value = client.value ? await client.value.indices() : [];
     activeIndex.value = null;
@@ -121,110 +201,111 @@
     mapping.value = null;
     settings.value = null;
     inspectionPanelOpen.value = false;
-  }, { immediate: true });
+  },
+  { immediate: true },
+);
 
-  const loadIndices = async () => {
-    indices.value = client.value ? await client.value.indices() : [];
-  };
+const loadIndices = async () => {
+  indices.value = client.value ? await client.value.indices() : [];
+};
 
-  /**
-   * Get index info of the active index.
-   */
-  const activeIndexInfo = computed(() => {
-    return indices.value.find((entry) => entry.name === activeIndex.value);
-  });
+/**
+ * Get index info of the active index.
+ */
+const activeIndexInfo = computed(() => {
+  return indices.value.find(entry => entry.name === activeIndex.value);
+});
 
-  /**
-   * Detect if we can navigate backwards (pagination).
-   */
-  const canNavigateBack = computed(() => page.value > 0);
+/**
+ * Detect if we can navigate backwards (pagination).
+ */
+const canNavigateBack = computed(() => page.value > 0);
 
-  /**
-   * Detect if we can navigate forwards (pagination).
-   */
-  const canNavigateForward = computed(() => {
-    const pageSize = 30; // TODO
-    const total = activeIndexInfo.value?.total ?? 0;
-    return page.value < Math.round(total / pageSize);
-  });
+/**
+ * Detect if we can navigate forwards (pagination).
+ */
+const canNavigateForward = computed(() => {
+  const pageSize = 30; // TODO
+  const total = activeIndexInfo.value?.total ?? 0;
+  return page.value < Math.round(total / pageSize);
+});
 
-  /**
-   * Navigate to the previous page of the records.
-   * @todo
-   */
-  const gotoPreviousPage = () => {
-    page.value -= 1;
-    updateRecords();
-  };
+/**
+ * Navigate to the previous page of the records.
+ * @todo
+ */
+const gotoPreviousPage = () => {
+  page.value -= 1;
+  updateRecords();
+};
 
-  /**
-   * Navigate to the next page of the records.
-   * @todo
-   */
-  const gotoNextPage = () => {
-    page.value += 1;
-    updateRecords();
-  };
+/**
+ * Navigate to the next page of the records.
+ * @todo
+ */
+const gotoNextPage = () => {
+  page.value += 1;
+  updateRecords();
+};
 
-  const refreshPage = () => {
-    loadIndices();
-    updateRecords();
-  };
+const refreshPage = () => {
+  loadIndices();
+  updateRecords();
+};
 
-  /**
-   * Load a given index in memory.
-   * @param index
-   */
-  const loadIndex = async (index: string) => {
-    activeIndex.value = index;
+/**
+ * Load a given index in memory.
+ * @param index
+ */
+const loadIndex = async (index: string) => {
+  activeIndex.value = index;
 
-    if (!client.value) return;
+  if (!client.value) return;
 
-    page.value = 0;
-    query.value = null;
-    source.value = null;
-    mapping.value = null;
-    settings.value = null;
-    inspectionTab.value = 'mapping';
-    inspectionPanelOpen.value = false;
+  page.value = 0;
+  query.value = null;
+  source.value = null;
+  mapping.value = null;
+  settings.value = null;
+  inspectionTab.value = 'mapping';
+  inspectionPanelOpen.value = false;
 
-    updateRecords();
+  updateRecords();
 
-    mapping.value = await client.value.mappings(index);
-    settings.value = await client.value.settings(index);
-  };
+  mapping.value = await client.value.mappings(index);
+  settings.value = await client.value.settings(index);
+};
 
-  /**
-   * Update the records of the active index.
-   */
-  const updateRecords = async () => {
-    if (!client.value) return;
+/**
+ * Update the records of the active index.
+ */
+const updateRecords = async () => {
+  if (!client.value) return;
 
-    const records = await client.value.documents(activeIndex.value, page.value, query.value);
+  const records = await client.value.documents(activeIndex.value, page.value, query.value);
 
-    if (records.length > 0) {
-      columns.value = Object.keys(records[0].data);
-      rows.value = records;
-    } else {
-      rows.value = [];
-    }
-  };
+  if (records.length > 0) {
+    columns.value = Object.keys(records[0].data);
+    rows.value = records;
+  } else {
+    rows.value = [];
+  }
+};
 
-  /**
-   * When we click on the add project button in the projects tab bar.
-   */
-  const createNewProject = () => {
-    replace({ path: '/settings' });
-  };
+/**
+ * When we click on the add project button in the projects tab bar.
+ */
+const createNewProject = () => {
+  replace({ path: '/settings' });
+};
 
-  /**
-   * When we click on a records table row.
-   * @param row
-   */
-  const handleClickRow = (row: DocumentInfo) => {
-    source.value = row.data;
-    inspectionTab.value = 'source';
-    inspectionPanelOpen.value = true;
-  };
-
+/**
+ * When we click on a records table row.
+ * @param row
+ */
+const handleClickRow = (row: DocumentInfo) => {
+  source.value = row.data;
+  inspectionTab.value = 'source';
+  inspectionPanelOpen.value = true;
+};
 </script>

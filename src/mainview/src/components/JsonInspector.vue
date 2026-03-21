@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts" setup>
-  import JsonValue from '@/components/JsonValue.vue';
+import JsonValue from '@/components/JsonValue.vue';
 
-  defineProps<{
-    jsonValue: object,
-  }>();
+defineProps<{
+  jsonValue: object;
+}>();
 </script>

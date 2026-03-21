@@ -2,26 +2,24 @@ import { Project } from '@/types';
 import { rpc } from '@/rpc';
 
 export type IndicesData = Array<{
-  id: string
-  name: string
-  total: number
-}>
+  id: string;
+  name: string;
+  total: number;
+}>;
 
 export type DocumentInfo = {
-  id: string
-  data: Record<string, string>
+  id: string;
+  data: Record<string, string>;
 };
 
 export type DocumentsData = DocumentInfo[];
 
 export default abstract class Client {
-
-  constructor(protected project: Project) {
-  }
+  constructor(protected project: Project) {}
 
   async request<T>(url: string, body?: any): Promise<T | undefined> {
-    return await rpc.request.request({ url, body }) as T | undefined;
-  };
+    return (await rpc.request.request({ url, body })) as T | undefined;
+  }
 
   abstract indices(): Promise<IndicesData>;
   abstract documents(index: string, page: number, search?: string): Promise<DocumentsData>;

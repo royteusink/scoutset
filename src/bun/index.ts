@@ -1,8 +1,8 @@
-import { BrowserWindow, BrowserView, Utils } from "electrobun/bun";
-import type { ScoutsetRPC } from "../shared/rpc-types";
+import { BrowserWindow, BrowserView, Utils } from 'electrobun/bun';
+import type { ScoutsetRPC } from '../shared/rpc-types';
 
 // Allow self-signed certificates for Elasticsearch connections.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Settings storage — use Electrobun's app-specific userData path
 const settingsDir = Utils.paths.userData;
@@ -10,7 +10,7 @@ const settingsPath = `${settingsDir}/settings.json`;
 
 // Helper: ensure settings directory exists
 async function ensureSettingsDir(): Promise<void> {
-  const { mkdir } = await import("node:fs/promises");
+  const { mkdir } = await import('node:fs/promises');
   await mkdir(settingsDir, { recursive: true });
 }
 
@@ -48,11 +48,11 @@ async function migrateOldConfig(): Promise<void> {
       if (oldConfig?.settings && Object.keys(oldConfig.settings).length > 0) {
         // Old format wraps everything under "settings" key — unwrap it
         await writeSettings(oldConfig.settings);
-        console.log("Migrated settings from old config.json");
+        console.log('Migrated settings from old config.json');
       }
     }
   } catch (err) {
-    console.error("Failed to migrate old config:", err);
+    console.error('Failed to migrate old config:', err);
   }
 }
 
@@ -68,9 +68,9 @@ const rpc = BrowserView.defineRPC<ScoutsetRPC>({
       request: async ({ url, body, headers }) => {
         try {
           const fetchOptions: RequestInit = {
-            method: body ? "POST" : "GET",
+            method: body ? 'POST' : 'GET',
             headers: {
-              "content-type": "application/json",
+              'content-type': 'application/json',
               ...headers,
             },
           };
@@ -82,7 +82,7 @@ const rpc = BrowserView.defineRPC<ScoutsetRPC>({
           const response = await fetch(url, fetchOptions);
           return await response.json();
         } catch (err) {
-          console.error("Request error:", err);
+          console.error('Request error:', err);
           return null;
         }
       },
@@ -105,13 +105,13 @@ const rpc = BrowserView.defineRPC<ScoutsetRPC>({
 });
 
 // Create main window
-const isDev = process.env.SCOUTSET_DEV === "1";
+const isDev = process.env.SCOUTSET_DEV === '1';
 
 const win = new BrowserWindow({
-  title: "Scoutset",
+  title: 'Scoutset',
   frame: { x: 200, y: 200, width: 1000, height: 800 },
-  url: isDev ? "http://localhost:5188" : "views://mainview/index.html",
+  url: isDev ? 'http://localhost:5188' : 'views://mainview/index.html',
   rpc: rpc,
 });
 
-console.log("Scoutset started");
+console.log('Scoutset started');

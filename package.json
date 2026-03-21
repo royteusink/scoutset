@@ -1,45 +1,51 @@
 {
   "name": "scoutset",
   "version": "1.0.0",
-  "description": "Scoutset is search engine data explorer",
   "private": true,
+  "description": "Scoutset is search engine data explorer",
+  "keywords": [
+    "elasticsearch",
+    "explorer",
+    "scoutset",
+    "searchengine",
+    "viewer"
+  ],
+  "homepage": "https://github.com/royteusink/scoutset#readme",
+  "bugs": {
+    "url": "https://github.com/royteusink/scoutset/issues"
+  },
+  "license": "MIT",
+  "author": "Roy Teusink",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/royteusink/scoutset.git"
+  },
   "scripts": {
     "dev:view": "cd src/mainview && bunx vite --host",
     "build:view": "cd src/mainview && bunx vue-tsc --noEmit && bunx vite build",
     "dev": "bun run build:view && electrobun dev",
     "dev:hmr": "SCOUTSET_DEV=1 bun run dev:view -- --port 5188 & sleep 2 && SCOUTSET_DEV=1 electrobun dev",
-    "build": "bun run build:view && electrobun build"
+    "build": "bun run build:view && electrobun build",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/royteusink/scoutset.git"
+  "dependencies": {
+    "@vueuse/core": "^14.2.1",
+    "electrobun": "^1.16.0",
+    "uuid": "^13.0.0"
   },
-  "keywords": [
-    "elasticsearch",
-    "searchengine",
-    "explorer",
-    "viewer",
-    "scoutset"
-  ],
-  "author": "Roy Teusink",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/royteusink/scoutset/issues"
-  },
-  "homepage": "https://github.com/royteusink/scoutset#readme",
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.2",
     "@vitejs/plugin-vue": "^6.0.5",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
     "vite": "^8.0.1",
     "vue": "^3.2.37",
     "vue-router": "^5.0.4",
     "vue-tsc": "^3.2.6"
-  },
-  "dependencies": {
-    "@vueuse/core": "^14.2.1",
-    "electrobun": "^1.16.0",
-    "uuid": "^13.0.0"
   }
 }

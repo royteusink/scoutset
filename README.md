@@ -22,11 +22,11 @@ Scoutset gives you a fast, visual way to browse indices, search documents, and i
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
+| Layer    | Technology                            |
+| -------- | ------------------------------------- |
 | Frontend | Vue 3, TypeScript, Tailwind CSS, Vite |
-| Desktop | Electrobun (Bun-based) |
-| Runtime | Bun |
+| Desktop  | Electrobun (Bun-based)                |
+| Runtime  | Bun                                   |
 
 ## Prerequisites
 
@@ -47,10 +47,42 @@ Run in development mode:
 bun run dev
 ```
 
+Run in development mode with hot module replacement:
+
+```sh
+bun run dev:hmr
+```
+
 Build the application:
 
 ```sh
 bun run build
+```
+
+## Developer
+
+Format code:
+
+```sh
+bun run fmt
+```
+
+Check formatting without writing changes:
+
+```sh
+bun run fmt:check
+```
+
+Lint code:
+
+```sh
+bun run lint
+```
+
+Lint and auto-fix:
+
+```sh
+bun run lint:fix
 ```
 
 ## Project Structure
