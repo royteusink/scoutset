@@ -36,8 +36,7 @@ export default class ElasticSearch extends Client {
       }));
   }
 
-  async documents(index: string, page: number, search?: string): Promise<DocumentsData> {
-    const pageSize = 30;
+  async documents(index: string, page: number, pageSize: number, search?: string): Promise<DocumentsData> {
     const pageOffset = page * pageSize;
 
     let body = null;

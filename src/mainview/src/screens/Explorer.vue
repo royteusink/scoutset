@@ -13,7 +13,7 @@
       />
     </Tabs>
 
-    <div class="bg-white flex flex-1 h-full overflow-clip">
+    <div class="bg-white flex flex-1 min-h-0 overflow-hidden">
       <aside class="flex-none w-72 border-r border-gray-200 overflow-auto">
         <div>
           <button
@@ -101,9 +101,21 @@
           v-if="activeIndex"
           :columns="columns"
           :rows="rows"
-          class="min-w-full flex-1"
+          class="min-w-full flex-1 min-h-0"
           @clickRow="handleClickRow"
         />
+        <div v-if="activeIndex" class="flex-none flex items-center justify-end border-t border-gray-200 px-2 py-1">
+          <label class="flex items-center gap-1 text-xs text-gray-500">
+            Rows per page
+            <select
+              :value="pageSize"
+              @change="changePageSize(Number(($event.target as HTMLSelectElement).value))"
+              class="text-xs border border-gray-200 rounded bg-white px-1 py-0.5 outline-hidden"
+            >
+              <option v-for="size in pageSizeOptions" :key="size" :value="size">{{ size }}</option>
+            </select>
+          </label>
+        </div>
       </section>
 
       <aside
@@ -187,6 +199,8 @@ const mapping = ref();
 const settings = ref();
 const query = ref();
 const page = ref(0);
+const pageSize = ref(80);
+const pageSizeOptions = [40, 80, 120, 160];
 const inspectionPanelOpen = ref(false);
 
 watch(
@@ -225,9 +239,8 @@ const canNavigateBack = computed(() => page.value > 0);
  * Detect if we can navigate forwards (pagination).
  */
 const canNavigateForward = computed(() => {
-  const pageSize = 30; // TODO
   const total = activeIndexInfo.value?.total ?? 0;
-  return page.value < Math.round(total / pageSize);
+  return page.value < Math.floor(total / pageSize.value);
 });
 
 /**
@@ -245,6 +258,12 @@ const gotoPreviousPage = () => {
  */
 const gotoNextPage = () => {
   page.value += 1;
+  updateRecords();
+};
+
+const changePageSize = (size: number) => {
+  pageSize.value = size;
+  page.value = 0;
   updateRecords();
 };
 
@@ -282,7 +301,7 @@ const loadIndex = async (index: string) => {
 const updateRecords = async () => {
   if (!client.value) return;
 
-  const records = await client.value.documents(activeIndex.value, page.value, query.value);
+  const records = await client.value.documents(activeIndex.value, page.value, pageSize.value, query.value);
 
   if (records.length > 0) {
     columns.value = Object.keys(records[0].data);
