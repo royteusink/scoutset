@@ -107,7 +107,7 @@ const rpc = BrowserView.defineRPC<ScoutsetRPC>({
 // Create main window
 const isDev = process.env.SCOUTSET_DEV === '1';
 
-const win = new BrowserWindow({
+new BrowserWindow({
   title: 'Scoutset',
   frame: { x: 200, y: 200, width: 1000, height: 800 },
   url: isDev ? 'http://localhost:5188' : 'views://mainview/index.html',
