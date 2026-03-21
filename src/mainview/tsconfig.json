@@ -8,10 +8,10 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "baseUrl": "./",
     "strict": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@shared/*": ["../../src/shared/*"]
     },
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,

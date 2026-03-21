@@ -1,5 +1,6 @@
 import { BrowserWindow, BrowserView, Utils } from 'electrobun/bun';
-import type { ScoutsetRPC } from '../shared/rpc-types';
+import { mkdir } from 'node:fs/promises';
+import type { ScoutsetRPC } from '@shared/rpc-types';
 
 // Allow self-signed certificates for Elasticsearch connections.
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -10,7 +11,6 @@ const settingsPath = `${settingsDir}/settings.json`;
 
 // Helper: ensure settings directory exists
 async function ensureSettingsDir(): Promise<void> {
-  const { mkdir } = await import('node:fs/promises');
   await mkdir(settingsDir, { recursive: true });
 }
 
